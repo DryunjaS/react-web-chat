@@ -4,24 +4,30 @@ import io from "socket.io-client"
 import { MyInput } from "../UI/MyInput";
 import { MyButton } from "../UI/MyButton";
 
-const socket = io.connect("http://localhost:5000")
+const socket = io.connect("http://localhost:5000/")
 
 const Chat = () =>{
 
     const {search} = useLocation()
-    const [params,setParams] = useState(null)
+    const [user,setUser] = useState('')
     const [message,setMessage] = useState([])
-
+    const [input,setInput] = useState('')
     useEffect(()=>{
         const Search = Object.fromEntries(new URLSearchParams(search))
-        setParams(Search)
-        socket.emit('join',Search)
+        setUser(Search.name)
     },[search])
     useEffect(()=>{
         socket.on("message",(data)=>{
             setMessage((_message)=>[..._message,data])
         })
     },[])
+
+    const inputMes = ()=>{
+        socket.emit('message',input)
+        setInput('')
+    }
+    
+    console.log('user',user)
     console.log('message',message)
     return(
         <div className="container">
@@ -36,8 +42,10 @@ const Chat = () =>{
                 <form className="footer">
                     <MyInput
                         placeholder="Введите ваше сообщение..."
+                        value = {input}
+                        onChange = {(e)=>setInput(e.target.value)}
                     />
-                    <MyButton>Отправить</MyButton>
+                    <MyButton onClick={inputMes}>Отправить</MyButton>
                 </form>
             </div>
         </div>

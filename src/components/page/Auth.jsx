@@ -1,29 +1,48 @@
 import React, { useState } from "react";
 import { MyInput } from "../UI/MyInput";
 import { MyButton } from "../UI/MyButton";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const Auth = () =>{
-    const [username,setUsername] = useState("")
+import io from 'socket.io-client';
+const socket = io('http://localhost:5000'); 
 
-    return(
+const Auth = () => {
+    const [username, setUsername] = useState("");
+    const navigate = useNavigate();
+
+    const addUser = (e) => {
+        e.preventDefault();
+        if (!username) {
+            return;
+        }
+        socket.emit('login', username);
+        console.log('username',username)
+    }
+
+    socket.on('login', (data) => {
+        if (data.status === "OK") {
+            console.log('OK?','OK')
+            navigate(`/chat?name=${username}`);
+        }
+        console.log('OK?','NO')
+    });
+
+    return (
         <div className="container">
             <form className="Auth-form">
                 <h3>Для входа в чат:</h3>
                 <MyInput
                     placeholder="Введите ваше имя..."
-                    type = "text"
-                    name = "name"
-                    value = {username}
-                    onChange = {(e)=>{setUsername(e.target.value)}}
-                    autoComplete = "off"
+                    type="text"
+                    name="name"
+                    value={username}
+                    onChange={(e) => { setUsername(e.target.value) }}
+                    autoComplete="off"
                 />
-                <Link to={`/chat?name=${username}`}>
-                    <MyButton onClick={(e)=>{if(!username) e.preventDefault()}}>Войти</MyButton>
-                </Link>
+                <MyButton onClick={addUser}>Войти</MyButton>
             </form>
         </div>
     )
 }
 
-export default Auth
+export default Auth;
