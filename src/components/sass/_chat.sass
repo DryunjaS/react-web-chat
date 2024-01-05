@@ -23,11 +23,13 @@
     align-items: center
     color: #fff
     background-color: teal
+    border-radius: 10px 10px 0 0
 
     .title
         font-size: 20px
         margin: 0
         user-select: none
+
     .count-user
         cursor: pointer
 .main
@@ -45,10 +47,11 @@
     gap: 5px
 
     > *:first-child
-        flex: 0 0 70%
-
+        width: 100%
     > *:last-child
-        flex: 0 0 30%
+        width: max-content
+        padding: 0 20px
+
 .list-wrap
     height: 90%
     margin-right: 3%

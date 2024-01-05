@@ -140,6 +140,7 @@ h3 {
           align-items: center;
   color: #fff;
   background-color: teal;
+  border-radius: 10px 10px 0 0;
 }
 .header .title {
   font-size: 20px;
@@ -172,14 +173,13 @@ h3 {
   gap: 5px;
 }
 .footer > *:first-child {
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 70%;
-          flex: 0 0 70%;
+  width: 100%;
 }
 .footer > *:last-child {
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 30%;
-          flex: 0 0 30%;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  padding: 0 20px;
 }
 
 .list-wrap {
@@ -277,4 +277,31 @@ h3 {
   margin-top: 5px;
   font-size: 13px;
   text-align: end;
+}
+
+.emoji-btn {
+  border: 0;
+  background-color: rgba(255, 0, 0, 0);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.emoji-img {
+  width: 45px;
+  padding-bottom: 5px;
+  cursor: pointer;
+}
+
+.EmojiPicker {
+  position: absolute;
+  bottom: 50px;
+  right: 0;
+  z-index: 100;
 }
