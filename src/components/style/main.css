@@ -123,7 +123,6 @@ h3 {
       -ms-flex-direction: column;
           flex-direction: column;
   background-color: #fff;
-  overflow: hidden;
 }
 
 .header {
@@ -143,10 +142,22 @@ h3 {
   background-color: teal;
 }
 .header .title {
-  position: absolute;
-  left: 5px;
   font-size: 20px;
+  margin: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
+.header .count-user {
+  cursor: pointer;
+}
+
+.main {
+  width: 100%;
+  overflow-y: scroll;
+}
+
 .footer {
   position: sticky;
   bottom: 0;
@@ -169,4 +180,97 @@ h3 {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 30%;
           flex: 0 0 30%;
+}
+
+.list-wrap {
+  height: 90%;
+  margin-right: 3%;
+}
+
+.list-title {
+  margin: 0;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  padding: 0 15px;
+  border-radius: 10px 10px 0 0;
+  height: 50px;
+  color: #fff;
+  background-color: teal;
+  line-height: 50px;
+}
+
+.list-users {
+  background-color: #fff;
+  z-index: 100;
+  border-radius: 0 0 10px 10px;
+  padding: 25px 30px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  height: 90%;
+}
+
+.mess-li-my {
+  color: #fff;
+  margin: 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: end;
+}
+
+.mess-li-other {
+  color: #fff;
+  margin: 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: start;
+}
+
+.mess-div-my {
+  background-color: teal;
+  padding: 10px;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  border-radius: 10px;
+}
+
+.mess-div-other {
+  background-color: #C7D0CC;
+  color: #000;
+  padding: 10px;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  border-radius: 10px;
+}
+
+.mess-title {
+  font-weight: 700;
+}
+
+.mess-text {
+  max-width: 500px;
+  overflow-wrap: break-word;
+}
+
+.mess-time-my {
+  margin-top: 5px;
+  font-size: 13px;
+  text-align: start;
+}
+
+.mess-time-other {
+  margin-top: 5px;
+  font-size: 13px;
+  text-align: end;
 }

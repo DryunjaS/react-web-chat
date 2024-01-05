@@ -1,43 +1,56 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import io from "socket.io-client"
 import { MyInput } from "../UI/MyInput";
 import { MyButton } from "../UI/MyButton";
+import { ListUsers } from "./ListUsers";
+import { Mess } from "./Mess";
 
 const socket = io.connect("http://localhost:5000/")
 
 const Chat = () =>{
 
     const {search} = useLocation()
-    const [user,setUser] = useState('')
+    const [thisUser,setThisUser] = useState('')
+    const [users,setUsers] = useState([])
     const [message,setMessage] = useState([])
     const [input,setInput] = useState('')
-    useEffect(()=>{
-        const Search = Object.fromEntries(new URLSearchParams(search))
-        setUser(Search.name)
-    },[search])
-    useEffect(()=>{
-        socket.on("message",(data)=>{
-            setMessage((_message)=>[..._message,data])
-        })
-    },[])
 
-    const inputMes = ()=>{
-        socket.emit('message',input)
-        setInput('')
+    useEffect(() => {
+        const Search = Object.fromEntries(new URLSearchParams(search));
+        const currentUserName = Search.name; 
+      
+        setThisUser(currentUserName);
+        socket.emit('new_chat', currentUserName);
+      
+        socket.on('users_arr', ({ users_arr }) => {
+          setUsers(users_arr);
+        });
+
+        socket.on("new message", (data) => {
+            setMessage((_message) => [..._message, data]);
+        });
+      }, [users]);
+
+    const inputMes = (e)=>{
+        e.preventDefault();
+        console.log('message')
+        if(input){
+            socket.emit('message',{
+                mess:input,
+                name:thisUser
+            })
+            setInput('')
+        }
     }
-    
-    console.log('user',user)
-    console.log('message',message)
     return(
         <div className="container">
             <div className="window">
                 <div className="header">
-                    <div className="title">Основной чат</div>
-                    <div className="count-user">2 уч. в сети</div>
+                    <h3 className="title">Основной чат</h3>
                 </div>
                 <div className="main">
-                    
+                    <Mess message={message} User={thisUser}/>
                 </div>
                 <form className="footer">
                     <MyInput
@@ -48,6 +61,7 @@ const Chat = () =>{
                     <MyButton onClick={inputMes}>Отправить</MyButton>
                 </form>
             </div>
+            <ListUsers list={users}/>
         </div>
     )
 }

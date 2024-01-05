@@ -1,31 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useCallback, useState, useMemo, memo } from "react";
 import { MyInput } from "../UI/MyInput";
 import { MyButton } from "../UI/MyButton";
 import { useNavigate } from "react-router-dom";
 
 import io from 'socket.io-client';
-const socket = io('http://localhost:5000'); 
+const socket = io('http://localhost:5000/');
 
 const Auth = () => {
     const [username, setUsername] = useState("");
     const navigate = useNavigate();
 
-    const addUser = (e) => {
+    const addUser = useCallback((e) => {
         e.preventDefault();
         if (!username) {
             return;
         }
-        socket.emit('login', username);
-        console.log('username',username)
-    }
+        socket.emit('login', username.trim());
 
-    socket.on('login', (data) => {
-        if (data.status === "OK") {
-            console.log('OK?','OK')
-            navigate(`/chat?name=${username}`);
-        }
-        console.log('OK?','NO')
-    });
+        socket.on('navigate', (data) => {
+            if (data.status === "OK") {
+                navigate(`/chat?name=${username}`);
+            } else {
+                console.log('NO');
+            }
+        });
+    },[])
 
     return (
         <div className="container">
@@ -39,10 +38,11 @@ const Auth = () => {
                     onChange={(e) => { setUsername(e.target.value) }}
                     autoComplete="off"
                 />
-                <MyButton onClick={addUser}>Войти</MyButton>
+                <MyButton type='Submit' onClick={addUser}>Войти</MyButton>
             </form>
         </div>
     )
 }
 
 export default Auth;
+
