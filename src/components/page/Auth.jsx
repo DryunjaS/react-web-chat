@@ -1,32 +1,15 @@
-import React, { useEffect, useCallback, useState, useMemo, memo } from "react";
+import React, { useState } from "react";
 import { MyInput } from "../UI/MyInput";
 import { MyButton } from "../UI/MyButton";
-import { useNavigate } from "react-router-dom";
 
-import io from 'socket.io-client';
-const socket = io('http://localhost:5000/');
-
-const Auth = () => {
+const Auth = ({onRegister}) => {
     const [username, setUsername] = useState("");
-    const navigate = useNavigate();
-
-    const addUser = useCallback((e) => {
-        e.preventDefault();
-        if (!username) {
-            return;
+    const handleRegister = () => {
+        if (username.trim() !== '') {
+            onRegister(username.trim());
         }
-        socket.emit('login', username.trim());
-
-        socket.on('navigate', (data) => {
-            if (data.status === "OK") {
-                navigate(`/chat?name=${username}`);
-            } else {
-                console.log('NO');
-            }
-        });
-    },[])
-
-    return (
+      };
+     return (
         <div className="container">
             <form className="Auth-form">
                 <h3>Для входа в чат:</h3>
@@ -38,7 +21,7 @@ const Auth = () => {
                     onChange={(e) => { setUsername(e.target.value) }}
                     autoComplete="off"
                 />
-                <MyButton type='Submit' onClick={addUser}>Войти</MyButton>
+                <MyButton type='Submit' onClick={handleRegister}>Войти</MyButton>
             </form>
         </div>
     )

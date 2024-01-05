@@ -213,6 +213,10 @@ h3 {
   height: 90%;
 }
 
+.my-name {
+  color: red;
+}
+
 .mess-li-my {
   color: #fff;
   margin: 5px;

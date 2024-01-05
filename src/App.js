@@ -1,11 +1,11 @@
-import AppRouter from './components/Router/AppRouter';
+import Chat from './components/page/Chat'
 
 function App() {
-  return (
-    <div className="App">
-      <AppRouter/>
-    </div>
-  );
+	return (
+		<div className='App'>
+			<Chat />
+		</div>
+	)
 }
 
-export default App;
+export default App
