@@ -220,23 +220,20 @@ h3 {
 .mess-li-my {
   color: #fff;
   margin: 5px;
+}
+
+.mess-li-other {
+  color: #fff;
+  margin: 5px;
+}
+
+.mess-div-wrap {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: end;
       -ms-flex-pack: end;
           justify-content: end;
-}
-
-.mess-li-other {
-  color: #fff;
-  margin: 5px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: start;
 }
 
 .mess-div-my {
@@ -246,6 +243,8 @@ h3 {
   width: -moz-max-content;
   width: max-content;
   border-radius: 10px;
+  position: relative;
+  right: 0px;
 }
 
 .mess-div-other {
@@ -258,11 +257,18 @@ h3 {
   border-radius: 10px;
 }
 
-.mess-title {
-  font-weight: 700;
+.mess-title-my {
+  color: teal;
+  text-align: end;
+}
+
+.mess-title-other {
+  color: #000;
+  text-align: start;
 }
 
 .mess-text {
+  font-size: 18px;
   max-width: 500px;
   overflow-wrap: break-word;
 }
