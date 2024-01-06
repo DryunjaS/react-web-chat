@@ -75,8 +75,41 @@ const Chat = () =>{
             setThisUser('');
           }
         });
-      };
+    };
+
+      //----------------------------
+    useEffect(() => {
+        socket.on('file-uploaded', (fileData) => {
+          setMessagesArr((prevMessages) => [
+            ...prevMessages,
+            { ...fileData, isFile: true },
+          ]);
+        });
       
+        return () => {
+          socket.off('file-uploaded');
+        };
+    }, [socket, setMessagesArr]);
+      
+    const handleFileUpload = (e) => {
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+      
+        const reader = new FileReader();
+      
+        reader.onloadend = () => {
+          const fileData = reader.result;
+          socket.emit('file-upload', {
+            fileData,
+            fileName: file.name,
+            nick: thisUser, // Добавляем информацию о пользователе, отправившем файл
+          });
+        };
+        reader.readAsArrayBuffer(file);
+    };
+       
+    const baseServerUrl = 'http://localhost:5000'
+
     return(
         <div>
             {!registered ? (<Auth onRegister={handleRegister} />) 
@@ -87,7 +120,7 @@ const Chat = () =>{
                         <h3 className="title">Основной чат</h3>
                     </div>
                     <div className="main">
-                        <Mess message={messagesArr} User={thisUser}/>
+                        <Mess message={messagesArr} User={thisUser} baseServerUrl={baseServerUrl}/>
                     </div>
                     <form className="footer">
                         <MyInput
@@ -109,7 +142,8 @@ const Chat = () =>{
                         <EmojiPicker 
                             className='EmojiPicker' 
                             onEmojiClick={handleEmojiClick} 
-                        />}                        
+                        />}
+                        <input type='file' id='fileInput' onChange={handleFileUpload} />
                         <MyButton onClick={inputMes}>Отправить</MyButton>
                     </form>
 
