@@ -297,6 +297,7 @@ h3 {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  height: 45px;
 }
 
 .emoji-img {
@@ -310,4 +311,26 @@ h3 {
   bottom: 50px;
   right: 0;
   z-index: 100;
+}
+
+.fileInputLabel {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  height: 35px;
+}
+
+.attachmentIcon {
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+}
+
+#fileInput {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  cursor: pointer;
 }

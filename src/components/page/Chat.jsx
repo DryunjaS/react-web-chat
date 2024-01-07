@@ -92,21 +92,33 @@ const Chat = () =>{
     }, [socket, setMessagesArr]);
       
     const handleFileUpload = (e) => {
-        const fileInput = document.getElementById('fileInput');
-        const file = fileInput.files[0];
-      
-        const reader = new FileReader();
-      
-        reader.onloadend = () => {
-          const fileData = reader.result;
-          socket.emit('file-upload', {
-            fileData,
-            fileName: file.name,
-            nick: thisUser, // Добавляем информацию о пользователе, отправившем файл
-          });
-        };
-        reader.readAsArrayBuffer(file);
+        try {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+    
+            if (!file) {
+                console.error('No file selected');
+                return;
+            }
+    
+            const reader = new FileReader();
+    
+            reader.onloadend = () => {
+                const fileData = reader.result;
+    
+                socket.emit('file-upload', {
+                    fileData,
+                    fileName: file.name,
+                    nick: thisUser,
+                });
+            };
+    
+            reader.readAsArrayBuffer(file);
+        } catch (error) {
+            console.error('Error in handleFileUpload:', error);
+        }
     };
+    
        
     const baseServerUrl = 'http://localhost:5000'
 
@@ -143,7 +155,10 @@ const Chat = () =>{
                             className='EmojiPicker' 
                             onEmojiClick={handleEmojiClick} 
                         />}
-                        <input type='file' id='fileInput' onChange={handleFileUpload} />
+                        <label htmlFor="fileInput" className="fileInputLabel">
+                          <img src={process.env.PUBLIC_URL + "/img/skrepcka.png"} alt="Attachment Icon" className="attachmentIcon" />
+                          <input type="file" id="fileInput" onChange={handleFileUpload} />
+                        </label>
                         <MyButton onClick={inputMes}>Отправить</MyButton>
                     </form>
 
