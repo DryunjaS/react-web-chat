@@ -85,38 +85,46 @@ const Chat = () =>{
             { ...fileData, isFile: true },
           ]);
         });
-      
         return () => {
           socket.off('file-uploaded');
         };
     }, [socket, setMessagesArr]);
-      
+    useEffect(() => {
+        // Обработка истории файлов
+        socket.on('file-history', (fileHistory) => {
+            setMessagesArr((prevMessages) => [
+                ...prevMessages,
+                ...fileHistory.map((fileData) => ({ ...fileData, isFile: true })),
+            ]);
+        });
+    
+        return () => {
+            socket.off('file-history');
+        };
+    }, [socket, setMessagesArr]);
+    
     const handleFileUpload = (e) => {
-        try {
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
-    
-            if (!file) {
-                console.error('No file selected');
-                return;
-            }
-    
-            const reader = new FileReader();
-    
-            reader.onloadend = () => {
-                const fileData = reader.result;
-    
-                socket.emit('file-upload', {
-                    fileData,
-                    fileName: file.name,
-                    nick: thisUser,
-                });
-            };
-    
-            reader.readAsArrayBuffer(file);
-        } catch (error) {
-            console.error('Error in handleFileUpload:', error);
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+        
+        if (!file) {
+            return;
         }
+    
+        const reader = new FileReader();
+    
+        reader.onloadend = () => {
+            const fileData = reader.result; // Теперь fileData - это ArrayBuffer
+    
+            socket.emit('file-upload', {
+                fileData,
+                fileType: file.type,
+                fileName: file.name,
+                nick: thisUser,
+            });
+        };
+    
+        reader.readAsArrayBuffer(file);
     };
     
        
