@@ -1,9 +1,11 @@
 import React from 'react';
 
-export const Mess = ({ message, User, baseServerUrl }) => {
+export const Mess = ({ message, User, baseServerUrl, thisChat }) => {
+  const filteredMessages = message.filter(mess => mess.room === thisChat);
+
   return (
     <div>
-      {message.map((mess, index) => (
+      {filteredMessages.map((mess, index) => (
         <ul className="ul-mess" key={index}>
           <li className={User === mess.nick ? 'mess-li-my' : 'mess-li-other'}>
             <div className={User === mess.nick ? 'mess-title-my' : 'mess-title-other'}>

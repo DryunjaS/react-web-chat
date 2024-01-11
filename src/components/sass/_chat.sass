@@ -1,5 +1,11 @@
 
 //------Чат-------
+.wrapper
+    display: flex
+    justify-content: center
+    align-items: center
+    height: 90%
+    width: 100%
 .window
     flex: 1
     position: relative
@@ -7,8 +13,7 @@
     box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset
     border-radius: 10px
     width: 100%
-    height: 90%
-    margin: 12%
+    height: 100%
     display: flex
     justify-content: center
     align-items: center
@@ -53,8 +58,8 @@
         padding: 0 20px
 
 .list-wrap
-    height: 90%
-    margin-right: 3%
+    height: 100%
+    margin: 0 3%
 .list-title
     margin: 0
     user-select: none
@@ -64,12 +69,52 @@
     color: #fff
     background-color: teal
     line-height: 50px
+    text-align: center
 .list-users
     background-color: #fff
-    z-index: 100
     border-radius: 0 0 10px 10px
-    padding: 25px 30px
+    padding: 12px 30px
     user-select: none
     height: 90%
+    overflow-y: scroll
 .my-name
-    color: red
+    color: teal
+    font-weight: 700
+
+.li-chat
+    list-style-type: none
+    border: 1px solid teal
+    text-align: center
+    padding: 5px 10px
+    border-radius: 5px
+    margin-bottom: 5px
+    &:hover
+        cursor: pointer
+        background-color: teal
+        color: #fff
+        scale: 1.1
+        transition: all 0.2s ease-out
+.li-chat-my
+    background-color: teal
+    color: #fff
+    list-style-type: none
+    border: 1px solid teal
+    text-align: center
+    padding: 5px 10px
+    border-radius: 5px
+    margin-bottom: 5px
+.add-chat
+    font-size: 20px
+    width: 30px
+    height: 30px
+    border-radius: 50%
+    border: 3px solid teal
+    background-color: #fff
+    color: teal
+    margin-left: 35px
+    &:hover
+        cursor: pointer
+        color: #fff
+        background-color: teal
+        scale: 1.1
+        transition: all 0.2s ease-out

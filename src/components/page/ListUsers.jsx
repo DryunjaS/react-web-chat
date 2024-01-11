@@ -7,7 +7,7 @@ export const ListUsers = ({ list,User }) => {
         <div className="list-users">
             {list.map((item, index) => (
                 <ul key={index}>
-                <li className={User === item ? 'my-name' : ''}>{item}</li>
+                <li className={User === item ? 'my-name' : 'other-name'}>{item}</li>
                 </ul>
             ))}
        </div>

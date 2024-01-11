@@ -6,17 +6,21 @@ import { MyButton } from "../UI/MyButton";
 import { ListUsers } from "./ListUsers";
 import { Mess } from "./Mess";
 import Auth from "./Auth";
+import { ListChat } from "./ListChat";
 
 const socket = io.connect("http://localhost:5000/")
 
 const Chat = () =>{
 
     const [thisUser,setThisUser] = useState('')
+    const [thisChat,setThisChat] = useState('Крутой')
+    const [chats,setChats] = useState(['Основной', 'Крутой', 'Ровный'])
     const [usersArr,setUsersArr] = useState([])
     const [messagesArr,setMessagesArr] = useState([])
     const [message,setMessage] = useState('')
 	const [registered, setRegistered] = useState(false)
     const [isPickerVisible, setPickerVisible] = useState(false);
+    const [isAddChat, setIsAddChat] = useState(false);
 
     useEffect(() => {   
         socket.on('message history', (history) => {
@@ -58,6 +62,7 @@ const Chat = () =>{
           socket.emit('message', {
             mess: message,
             name: thisUser,
+            room: thisChat
           });
           setMessage('');
         }
@@ -76,7 +81,10 @@ const Chat = () =>{
           }
         });
     };
-
+    
+    const handleChat = (chat)=>{
+        setThisChat(chat)
+    }
       //----------------------------
     useEffect(() => {
         socket.on('file-uploaded', (fileData) => {
@@ -121,6 +129,7 @@ const Chat = () =>{
                 fileType: file.type,
                 fileName: file.name,
                 nick: thisUser,
+                room:thisChat
             });
         };
     
@@ -129,18 +138,20 @@ const Chat = () =>{
     
        
     const baseServerUrl = 'http://localhost:5000'
-
+    
     return(
         <div>
             {!registered ? (<Auth onRegister={handleRegister} />) 
             : (
             <div className="container">
+                <div className="wrapper">
+                <ListChat chats={chats} thisChat={thisChat} onChat={handleChat}/>
                 <div className="window">
                     <div className="header">
-                        <h3 className="title">Основной чат</h3>
+                        <h3 className="title">{thisChat} чат</h3>
                     </div>
                     <div className="main">
-                        <Mess message={messagesArr} User={thisUser} baseServerUrl={baseServerUrl}/>
+                        <Mess message={messagesArr} User={thisUser} baseServerUrl={baseServerUrl} thisChat={thisChat}/>
                     </div>
                     <form className="footer">
                         <MyInput
@@ -172,6 +183,7 @@ const Chat = () =>{
 
                 </div>
                 <ListUsers list={usersArr} User={thisUser}/>
+                </div>
             </div>
         )}
         </div>
