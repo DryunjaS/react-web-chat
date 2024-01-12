@@ -175,7 +175,8 @@ const Chat = () =>{
                     addChat={addChat}
                 />
                 {
-                    isAddChat && <AddRoom 
+                    isAddChat && <AddRoom
+                        usedChats={chats}
                         enterAddChat={enterAddChat} 
                         cancleAddChat={cancleAddChat}/>
                 }
