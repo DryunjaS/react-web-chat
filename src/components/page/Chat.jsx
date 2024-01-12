@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import io from "socket.io-client"
 import EmojiPicker from 'emoji-picker-react';
 import { MyInput } from "../UI/MyInput";
@@ -7,6 +7,7 @@ import { ListUsers } from "./ListUsers";
 import { Mess } from "./Mess";
 import Auth from "./Auth";
 import { ListChat } from "./ListChat";
+import { AddRoom } from "./AddRoom";
 
 const socket = io.connect("http://localhost:5000/")
 
@@ -38,13 +39,19 @@ const Chat = () =>{
             console.log('File uploaded:', data);
             setMessagesArr((prevMessages) => [...prevMessages, data]);
         });
+        socket.on('chats new', (chats) => {
+            console.log('chats new', chats);
+            setChats(chats)
+        });
         return () => {
+            socket.off('chats new');
             socket.off('message history');
 			socket.off('users_arr')
 			socket.off('new message')
             socket.off('file uploaded');
 		}
       }, []);
+
       const handleEmojiClick = ({emoji})=>{
         setMessage((prevMessage) => {
             const newMessage = [...prevMessage, emoji].join('');
@@ -85,6 +92,22 @@ const Chat = () =>{
     const handleChat = (chat)=>{
         setThisChat(chat)
     }
+    const addChat = (val)=>{
+        setIsAddChat(val)
+    }
+    const cancleAddChat = (isChack)=>{
+        setIsAddChat(isChack)
+    }
+    const enterAddChat = (newChat) => {
+        setChats((prevChats) => {
+            const updatedChats = [...prevChats, newChat];
+            socket.emit('chats new', updatedChats);
+            return updatedChats;
+        });
+        setIsAddChat(false);
+    };
+    
+
       //----------------------------
     useEffect(() => {
         socket.on('file-uploaded', (fileData) => {
@@ -145,7 +168,17 @@ const Chat = () =>{
             : (
             <div className="container">
                 <div className="wrapper">
-                <ListChat chats={chats} thisChat={thisChat} onChat={handleChat}/>
+                <ListChat 
+                    chats={chats} 
+                    thisChat={thisChat} 
+                    onChat={handleChat} 
+                    addChat={addChat}
+                />
+                {
+                    isAddChat && <AddRoom 
+                        enterAddChat={enterAddChat} 
+                        cancleAddChat={cancleAddChat}/>
+                }
                 <div className="window">
                     <div className="header">
                         <h3 className="title">{thisChat} чат</h3>

@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const ListChat = ({chats,thisChat,onChat}) => {
+export const ListChat = ({chats,thisChat,onChat,addChat}) => {
 
   return (
     <div className="list-wrap">
@@ -14,7 +14,7 @@ export const ListChat = ({chats,thisChat,onChat}) => {
                   >{item}</li>
                 </ul>
             ))}
-            <button className='add-chat'>+</button>
+            <button className='add-chat' onClick={()=>addChat(true)}>+</button>
        </div>
     </div>
   )

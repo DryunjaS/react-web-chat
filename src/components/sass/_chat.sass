@@ -118,3 +118,39 @@
         background-color: teal
         scale: 1.1
         transition: all 0.2s ease-out
+.wrapper-chat
+    position: absolute
+    top: 0
+    background-color: #fff
+    width: 100vw
+    height: 100vh
+    z-index: 100
+    display: flex
+    justify-content: center
+    align-items: center
+    flex-direction: column
+    overflow: hidden
+
+    &::before
+        content: ""
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        background-image: url('../../../public/img/AuthBg.jpg')
+        background-size: cover
+        filter: blur(2px)
+        z-index: -1
+
+.El-newChat
+    background-color: rgba(255, 255, 255, 1)
+    border-radius: 0 0 10px 10px
+    padding: 12px 30px
+    user-select: none
+    width: 400px
+    display: flex
+    justify-content: center
+    align-items: center
+    flex-direction: column
+    border: 2px solid teal
