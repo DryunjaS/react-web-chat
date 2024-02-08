@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import io from 'socket.io-client'
 import EmojiPicker from 'emoji-picker-react'
 import { MyInput } from '../UI/MyInput'
@@ -9,7 +9,10 @@ import Auth from './Auth'
 import { ListChat } from './ListChat'
 import { AddRoom } from './AddRoom'
 
-const socket = io.connect('http://localhost:5000/')
+// const socket = io.connect('http://localhost:5000/')
+const IP_ADRESS = '192.168.35.151'
+const PORT = 8080
+const socket = io.connect(`${IP_ADRESS}:${PORT}`)
 
 const Chat = () => {
 	const [thisUser, setThisUser] = useState('')
@@ -21,6 +24,8 @@ const Chat = () => {
 	const [registered, setRegistered] = useState(false)
 	const [isPickerVisible, setPickerVisible] = useState(false)
 	const [isAddChat, setIsAddChat] = useState(false)
+
+	const inputRef = useRef(null)
 
 	useEffect(() => {
 		socket.on('message history', (history) => {
@@ -58,7 +63,10 @@ const Chat = () => {
 		})
 	}
 	const closePicker = () => {
-		if (isPickerVisible) setPickerVisible(false)
+		if (isPickerVisible) {
+			setPickerVisible(false)
+			inputRef.current.focus()
+		}
 	}
 	const togglePicker = (e) => {
 		e.preventDefault()
@@ -161,11 +169,34 @@ const Chat = () => {
 	const handleKeyPress = (e) => {
 		if (e.key === 'Enter' && !e.shiftKey) {
 			e.preventDefault()
+			setPickerVisible(false) // Close the emoji picker when Enter is pressed
 			inputMes(e)
 		}
 	}
+	useEffect(() => {
+		document.body.addEventListener('click', closePicker)
 
-	const baseServerUrl = 'http://localhost:5000'
+		return () => {
+			document.body.removeEventListener('click', closePicker)
+		}
+	}, [])
+	const baseServerUrl = `http://${IP_ADRESS}:${PORT}`
+
+	useEffect(() => {
+		const handleGlobalKeyPress = (e) => {
+			if (e.key === 'Enter' && !e.shiftKey) {
+				e.preventDefault()
+				setPickerVisible(false) // Закрыть выбор смайликов при нажатии клавиши Enter
+				inputMes(e)
+			}
+		}
+
+		document.addEventListener('keydown', handleGlobalKeyPress)
+
+		return () => {
+			document.removeEventListener('keydown', handleGlobalKeyPress)
+		}
+	}, [inputMes, setPickerVisible])
 
 	return (
 		<div>
@@ -199,12 +230,14 @@ const Chat = () => {
 									thisChat={thisChat}
 								/>
 							</div>
-							<form className='footer'>
+							<form className='footer' onClick={(e) => e.stopPropagation()}>
 								<MyInput
 									placeholder='Введите ваше сообщение...'
 									value={message}
 									onChange={(e) => setMessage(e.target.value)}
 									onKeyPress={handleKeyPress}
+									ref={inputRef}
+									autoFocus={true} // Добавьте это свойство
 								/>
 								<button onClick={togglePicker} className='emoji-btn'>
 									{!isPickerVisible ? (
@@ -225,6 +258,13 @@ const Chat = () => {
 									<EmojiPicker
 										className='EmojiPicker'
 										onEmojiClick={handleEmojiClick}
+										onClick={(e) => e.stopPropagation()}
+										style={{
+											position: 'absolute',
+											bottom: '55px',
+											right: '0',
+											zIndex: '100',
+										}}
 									/>
 								)}
 								<label htmlFor='fileInput' className='fileInputLabel'>

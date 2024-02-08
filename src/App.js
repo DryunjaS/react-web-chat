@@ -1,9 +1,9 @@
-import Chat from './components/page/Chat'
+import MyRoutes from './router'
 
 function App() {
 	return (
 		<div className='App'>
-			<Chat />
+			<MyRoutes />
 		</div>
 	)
 }
