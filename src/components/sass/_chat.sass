@@ -1,12 +1,13 @@
-
 //------Чат-------
-.wrapper
+.wrapper 
     display: flex
     justify-content: center
     align-items: center
     height: 90%
     width: 100%
-.window
+
+
+.window 
     flex: 1
     position: relative
     z-index: 1
@@ -19,7 +20,9 @@
     align-items: center
     flex-direction: column
     background-color: #fff
-.header
+
+
+.header 
     width: 100%
     height: 50px
     position: relative
@@ -29,19 +32,36 @@
     color: #fff
     background-color: teal
     border-radius: 10px 10px 0 0
+    padding: 10px 0
+    box-sizing: border-box
 
-    .title
+    .title 
         font-size: 20px
         margin: 0
         user-select: none
+    
 
-    .count-user
+    .count-user 
         cursor: pointer
-.main
+    
+
+
+.main 
     width: 100%
     overflow-y: scroll
 
-.footer
+    &::-webkit-scrollbar 
+        width: 8px
+    
+
+    &::-webkit-scrollbar-thumb 
+        background-color: teal
+        border-radius: 20px
+        margin: 10px 0
+    
+
+
+.footer 
     position: sticky
     bottom: 0
     width: 100%
@@ -51,16 +71,22 @@
     display: flex
     gap: 5px
 
-    > *:first-child
+    > *:first-child 
         width: 100%
-    > *:last-child
+    
+
+    > *:last-child 
         width: max-content
         padding: 0 20px
+    
 
-.list-wrap
+
+.list-wrap 
     height: 100%
     margin: 0 3%
-.list-title
+
+
+.list-title 
     margin: 0
     user-select: none
     padding: 0 15px
@@ -70,31 +96,48 @@
     background-color: teal
     line-height: 50px
     text-align: center
-.list-users
+
+
+.list-users 
     background-color: #fff
     border-radius: 0 0 10px 10px
     padding: 12px 30px
     user-select: none
     height: 90%
     overflow-y: scroll
-.my-name
+
+    &::-webkit-scrollbar 
+        width: 8px
+    
+
+    &::-webkit-scrollbar-thumb 
+        background-color: teal
+        border-radius: 20px
+        margin: 10px 0
+
+.my-name 
     color: teal
     font-weight: 700
 
-.li-chat
+
+.li-chat 
     list-style-type: none
     border: 1px solid teal
     text-align: center
     padding: 5px 10px
     border-radius: 5px
     margin-bottom: 5px
-    &:hover
+
+    &:hover 
         cursor: pointer
         background-color: teal
         color: #fff
-        scale: 1.1
+        transform: scale(1.1)
         transition: all 0.2s ease-out
-.li-chat-my
+    
+
+
+.li-chat-my 
     background-color: teal
     color: #fff
     list-style-type: none
@@ -103,7 +146,9 @@
     padding: 5px 10px
     border-radius: 5px
     margin-bottom: 5px
-.add-chat
+
+
+.add-chat 
     font-size: 20px
     width: 30px
     height: 30px
@@ -112,13 +157,17 @@
     background-color: #fff
     color: teal
     margin-left: 35px
-    &:hover
+
+    &:hover 
         cursor: pointer
         color: #fff
         background-color: teal
-        scale: 1.1
+        transform: scale(1.1)
         transition: all 0.2s ease-out
-.wrapper-chat
+    
+
+
+.wrapper-chat 
     position: absolute
     top: 0
     background-color: #fff
@@ -131,7 +180,7 @@
     flex-direction: column
     overflow: hidden
 
-    &::before
+    &::before 
         content: ""
         position: absolute
         top: 0
@@ -142,8 +191,10 @@
         background-size: cover
         filter: blur(2px)
         z-index: -1
+    
 
-.El-newChat
+
+.El-newChat 
     background-color: rgba(255, 255, 255, 1)
     border-radius: 0 0 10px 10px
     padding: 12px 30px
@@ -154,3 +205,4 @@
     align-items: center
     flex-direction: column
     border: 2px solid teal
+

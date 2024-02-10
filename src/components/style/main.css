@@ -162,6 +162,9 @@ h3 {
   color: #fff;
   background-color: teal;
   border-radius: 10px 10px 0 0;
+  padding: 10px 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 .header .title {
   font-size: 20px;
@@ -178,6 +181,14 @@ h3 {
 .main {
   width: 100%;
   overflow-y: scroll;
+}
+.main::-webkit-scrollbar {
+  width: 8px;
+}
+.main::-webkit-scrollbar-thumb {
+  background-color: teal;
+  border-radius: 20px;
+  margin: 10px 0;
 }
 
 .footer {
@@ -234,6 +245,14 @@ h3 {
   height: 90%;
   overflow-y: scroll;
 }
+.list-users::-webkit-scrollbar {
+  width: 8px;
+}
+.list-users::-webkit-scrollbar-thumb {
+  background-color: teal;
+  border-radius: 20px;
+  margin: 10px 0;
+}
 
 .my-name {
   color: teal;
@@ -252,7 +271,8 @@ h3 {
   cursor: pointer;
   background-color: teal;
   color: #fff;
-  scale: 1.1;
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
   -webkit-transition: all 0.2s ease-out;
   transition: all 0.2s ease-out;
 }
@@ -282,7 +302,8 @@ h3 {
   cursor: pointer;
   color: #fff;
   background-color: teal;
-  scale: 1.1;
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
   -webkit-transition: all 0.2s ease-out;
   transition: all 0.2s ease-out;
 }
@@ -435,6 +456,15 @@ h3 {
   width: 45px;
   padding-bottom: 5px;
   cursor: pointer;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.emoji-img:hover {
+  border: 2px solid teal;
+  border-radius: 10px;
+  padding: 2px;
 }
 
 .EmojiPickerReact {
@@ -455,7 +485,16 @@ h3 {
   display: inline-block;
   position: relative;
   cursor: pointer;
-  height: 35px;
+  height: 45px;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.fileInputLabel:hover {
+  border: 2px solid teal;
+  border-radius: 10px;
+  padding: 4px;
 }
 
 .attachmentIcon {
