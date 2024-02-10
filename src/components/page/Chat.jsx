@@ -33,11 +33,17 @@ const Chat = observer(() => {
 		} else {
 			store.userName = ''
 		}
-
+		if (sessionStorage.getItem('thisChat')) {
+			setThisChat(sessionStorage.getItem('thisChat'))
+		} else {
+			setThisChat('Крутой')
+		}
 		socket.on('message history', (history) => {
 			setMessagesArr(history)
 		})
-
+		socket.on('chatsHistory', (chatsArr) => {
+			setChats(chatsArr)
+		})
 		socket.on('users_arr', (data) => {
 			console.log('data.users_arr', data.users_arr)
 			setUsersArr(data.users_arr)
@@ -105,6 +111,7 @@ const Chat = observer(() => {
 
 	const handleChat = (chat) => {
 		setThisChat(chat)
+		sessionStorage.setItem('thisChat', chat)
 	}
 	const addChat = (val) => {
 		setIsAddChat(val)
