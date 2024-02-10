@@ -2,7 +2,6 @@ import React from 'react'
 
 export const Mess = ({ message, User, baseServerUrl, thisChat }) => {
 	const filteredMessages = message.filter((mess) => mess.room === thisChat)
-	console.log('filteredMessages', filteredMessages)
 	return (
 		<div>
 			{filteredMessages.map((mess, index) => (

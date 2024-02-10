@@ -8,31 +8,39 @@ import { Mess } from './Mess'
 import Auth from './Auth'
 import { ListChat } from './ListChat'
 import { AddRoom } from './AddRoom'
+import store from '../store/store'
+import { observer } from 'mobx-react'
 
 // const socket = io.connect('http://localhost:5000/')
 const IP_ADRESS = '192.168.35.151'
 const PORT = 8080
 const socket = io.connect(`${IP_ADRESS}:${PORT}`)
 
-const Chat = () => {
+const Chat = observer(() => {
 	const [thisUser, setThisUser] = useState('')
 	const [thisChat, setThisChat] = useState('Крутой')
 	const [chats, setChats] = useState(['Основной', 'Крутой', 'Ровный'])
 	const [usersArr, setUsersArr] = useState([])
 	const [messagesArr, setMessagesArr] = useState([])
 	const [message, setMessage] = useState('')
-	const [registered, setRegistered] = useState(false)
 	const [isPickerVisible, setPickerVisible] = useState(false)
 	const [isAddChat, setIsAddChat] = useState(false)
 
 	const inputRef = useRef(null)
-
 	useEffect(() => {
+		if (sessionStorage.getItem('thisUser')) {
+			setThisUser(sessionStorage.getItem('thisUser'))
+			socket.emit('login', sessionStorage.getItem('thisUser'))
+		} else {
+			setThisUser('')
+		}
+
 		socket.on('message history', (history) => {
 			setMessagesArr(history)
 		})
 
 		socket.on('users_arr', (data) => {
+			console.log('data.users_arr', data.users_arr)
 			setUsersArr(data.users_arr)
 		})
 
@@ -74,6 +82,11 @@ const Chat = () => {
 	}
 	const inputMes = (e) => {
 		e.preventDefault()
+		console.log('message', {
+			mess: message,
+			name: thisUser,
+			room: thisChat,
+		})
 		if (message) {
 			socket.emit('message', {
 				mess: message,
@@ -85,14 +98,11 @@ const Chat = () => {
 	}
 
 	const handleRegister = (newUsername) => {
-		socket.emit('login', newUsername)
-		setRegistered(true)
-		setThisUser(newUsername)
-
+		sessionStorage.setItem('thisUser', newUsername)
+		socket.emit('login', sessionStorage.getItem('thisUser'))
 		socket.on('login', (data) => {
 			if (data.status === 'FAILED') {
-				setRegistered(false)
-				setThisUser('')
+				sessionStorage.removeItem('thisUser')
 			}
 		})
 	}
@@ -185,12 +195,10 @@ const Chat = () => {
 	useEffect(() => {
 		const handleGlobalKeyPress = (e) => {
 			if (e.key === 'Enter' && !e.shiftKey) {
-				e.preventDefault()
 				setPickerVisible(false) // Закрыть выбор смайликов при нажатии клавиши Enter
 				inputMes(e)
 			}
 		}
-
 		document.addEventListener('keydown', handleGlobalKeyPress)
 
 		return () => {
@@ -200,7 +208,7 @@ const Chat = () => {
 
 	return (
 		<div>
-			{!registered ? (
+			{!thisUser ? (
 				<Auth onRegister={handleRegister} />
 			) : (
 				<div className='container' onClick={closePicker}>
@@ -225,7 +233,7 @@ const Chat = () => {
 							<div className='main'>
 								<Mess
 									message={messagesArr}
-									User={thisUser}
+									User={sessionStorage.getItem('thisUser')}
 									baseServerUrl={baseServerUrl}
 									thisChat={thisChat}
 								/>
@@ -288,6 +296,6 @@ const Chat = () => {
 			)}
 		</div>
 	)
-}
+})
 
 export default Chat
