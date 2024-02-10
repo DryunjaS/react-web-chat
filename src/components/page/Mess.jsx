@@ -1,23 +1,27 @@
 import React, { useEffect, useRef } from 'react'
+import { useInView } from 'react-intersection-observer'
 
 export const Mess = ({ message, User, baseServerUrl, thisChat }) => {
 	const filteredMessages = message.filter((mess) => mess.room === thisChat)
-	const lastMessageRef = useRef(null)
-
-	const scrollToLastMessage = () => {
-		lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' })
-	}
+	const messagesContainerRef = useRef(null)
+	const [ref, inView] = useInView({
+		triggerOnce: false,
+	})
 
 	useEffect(() => {
-		scrollToLastMessage()
-	}, [filteredMessages])
+		if (inView) {
+			messagesContainerRef.current?.lastElementChild?.scrollIntoView({
+				behavior: 'smooth',
+			})
+		}
+	}, [inView, filteredMessages])
 
 	return (
-		<div>
+		<div ref={messagesContainerRef}>
 			{filteredMessages.map((mess, index) => (
 				<div
 					key={index}
-					ref={index === filteredMessages.length - 1 ? lastMessageRef : null}
+					ref={index === filteredMessages.length - 2 ? ref : null}
 				>
 					<ul className='ul-mess'>
 						<li className={User === mess.nick ? 'mess-li-my' : 'mess-li-other'}>
