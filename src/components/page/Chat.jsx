@@ -17,7 +17,6 @@ const PORT = 8080
 const socket = io.connect(`${IP_ADRESS}:${PORT}`)
 
 const Chat = observer(() => {
-	const [thisUser, setThisUser] = useState('')
 	const [thisChat, setThisChat] = useState('Крутой')
 	const [chats, setChats] = useState(['Основной', 'Крутой', 'Ровный'])
 	const [usersArr, setUsersArr] = useState([])
@@ -29,10 +28,10 @@ const Chat = observer(() => {
 	const inputRef = useRef(null)
 	useEffect(() => {
 		if (sessionStorage.getItem('thisUser')) {
-			setThisUser(sessionStorage.getItem('thisUser'))
-			socket.emit('login', sessionStorage.getItem('thisUser'))
+			store.userName = sessionStorage.getItem('thisUser')
+			socket.emit('login', store.userName)
 		} else {
-			setThisUser('')
+			store.userName = ''
 		}
 
 		socket.on('message history', (history) => {
@@ -82,15 +81,10 @@ const Chat = observer(() => {
 	}
 	const inputMes = (e) => {
 		e.preventDefault()
-		console.log('message', {
-			mess: message,
-			name: thisUser,
-			room: thisChat,
-		})
 		if (message) {
 			socket.emit('message', {
 				mess: message,
-				name: thisUser,
+				name: store.userName,
 				room: thisChat,
 			})
 			setMessage('')
@@ -99,6 +93,8 @@ const Chat = observer(() => {
 
 	const handleRegister = (newUsername) => {
 		sessionStorage.setItem('thisUser', newUsername)
+		store.userName = newUsername
+
 		socket.emit('login', sessionStorage.getItem('thisUser'))
 		socket.on('login', (data) => {
 			if (data.status === 'FAILED') {
@@ -168,7 +164,7 @@ const Chat = observer(() => {
 				fileData,
 				fileType: file.type,
 				fileName: file.name,
-				nick: thisUser,
+				nick: store.userName,
 				room: thisChat,
 			})
 		}
@@ -208,7 +204,7 @@ const Chat = observer(() => {
 
 	return (
 		<div>
-			{!thisUser ? (
+			{!store.userName ? (
 				<Auth onRegister={handleRegister} />
 			) : (
 				<div className='container' onClick={closePicker}>
@@ -233,7 +229,7 @@ const Chat = observer(() => {
 							<div className='main'>
 								<Mess
 									message={messagesArr}
-									User={sessionStorage.getItem('thisUser')}
+									User={store.userName}
 									baseServerUrl={baseServerUrl}
 									thisChat={thisChat}
 								/>
@@ -290,7 +286,7 @@ const Chat = observer(() => {
 								<MyButton onClick={inputMes}>Отправить</MyButton>
 							</form>
 						</div>
-						<ListUsers list={usersArr} User={thisUser} />
+						<ListUsers list={usersArr} User={store.userName} />
 					</div>
 				</div>
 			)}
