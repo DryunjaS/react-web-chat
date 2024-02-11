@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 
 export const Mess = ({ message, User, baseServerUrl, thisChat }) => {
@@ -7,6 +7,8 @@ export const Mess = ({ message, User, baseServerUrl, thisChat }) => {
 	const [ref, inView] = useInView({
 		triggerOnce: false,
 	})
+	const [lastMessageRef, setLastMessageRef] = useState(null)
+	const [isBottom, setIsBottom] = useState(false)
 
 	useEffect(() => {
 		if (inView) {
@@ -15,6 +17,23 @@ export const Mess = ({ message, User, baseServerUrl, thisChat }) => {
 			})
 		}
 	}, [inView, filteredMessages])
+
+	useEffect(() => {
+		setIsBottom(filteredMessages.length > 0 && !inView)
+
+		// Устанавливаем ref для предпоследнего элемента
+		if (filteredMessages.length >= 2) {
+			const lastMessageElement =
+				messagesContainerRef.current.children[filteredMessages.length - 2]
+			setLastMessageRef(lastMessageElement)
+		}
+	}, [inView, filteredMessages])
+
+	const handleToBottom = () => {
+		lastMessageRef?.scrollIntoView({
+			behavior: 'smooth',
+		})
+	}
 
 	return (
 		<div ref={messagesContainerRef}>
@@ -88,6 +107,11 @@ export const Mess = ({ message, User, baseServerUrl, thisChat }) => {
 					</ul>
 				</div>
 			))}
+			{isBottom && (
+				<button className='btn-toBottom' onClick={handleToBottom}>
+					⇩
+				</button>
+			)}
 		</div>
 	)
 }
